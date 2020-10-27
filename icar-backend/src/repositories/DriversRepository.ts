@@ -13,46 +13,46 @@ interface UpdateDriverDto {
 class DriversRepository {
   private drivers: Driver[];
 
+  /* Just a mocked array to simulate a persistence and avoid unecessary
+     complexity from a real database. */
   constructor() {
     this.drivers = [
       {
         id: '4dd67905-4c33-49be-b08c-0cdff8bfb842',
         name: 'Sara Mills',
-        isAvaliable: true,
       },
       {
         id: '6d3f724c-b811-4062-8da9-824a4f6cf7c3',
         name: 'Frank Elliott',
-        isAvaliable: true,
       },
       {
         id: 'e4869f55-7a70-4b40-8dbd-21a99759ce91',
         name: 'Faye Walsh',
-        isAvaliable: true,
       },
       {
         id: '634275a5-bb76-4a0c-ad5c-c810afdaa882',
         name: 'Ellie Simmons',
-        isAvaliable: true,
       },
       {
         id: 'd473cf83-9445-4f32-b14b-4195af645138',
         name: 'Joshua Harris',
-        isAvaliable: true,
       },
     ];
   }
 
+  /* Return a list os all drivers. */
   public all(): Driver[] {
     return this.drivers;
   }
 
+  /* Adds a new driver to the database. */
   public create({ name }: CreateDriverDto): Driver {
     const car = new Driver({ name });
     this.drivers.push(car);
     return car;
   }
 
+  /* Update a driver from the database. */
   public update({ id, name }: UpdateDriverDto): void {
     const newDriver = new Driver({ name });
     const driverToBeUpdated = this.drivers.findIndex(d => d.id === id);
@@ -61,15 +61,7 @@ class DriversRepository {
     }
   }
 
-  public driverStatusToggle(id: string): void {
-    const driverToBeUpdated = this.drivers.findIndex(v => v.id === id);
-    if (driverToBeUpdated > -1) {
-      this.drivers[driverToBeUpdated].isAvaliable = !this.drivers[
-        driverToBeUpdated
-      ].isAvaliable;
-    }
-  }
-
+  /* Remove a driver from the database. */
   public remove(id: string): void {
     const vdriverToBeRemoved = this.drivers.findIndex(d => d.id === id);
     if (vdriverToBeRemoved > -1) {
@@ -77,20 +69,16 @@ class DriversRepository {
     }
   }
 
+  /* Find the entrance of a driver by its id. */
   public findOne(id: string): Driver | null {
     const foundDriver = this.drivers.find(d => d.id === id);
     return foundDriver || null;
   }
 
+  /* Find the entrance of a driver by its name. */
   public findByName(name: string): Driver[] | null {
     const cars = this.drivers.filter(c => c.name === name);
     return cars || null;
-  }
-
-  public isAvaliable(id: string): boolean {
-    const avaliableDriver = this.drivers.find(d => d.id === id);
-    const isAvaliable = !!avaliableDriver?.isAvaliable;
-    return isAvaliable;
   }
 }
 

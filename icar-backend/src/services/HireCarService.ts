@@ -1,15 +1,6 @@
 import VehicleUsage from '../models/VehicleUsage';
-import VehiclesRepository from '../repositories/VehiclesRepository';
 import VehiclesUsagesRepository from '../repositories/VehiclesUsagesRepository';
-import DriversRepository from '../repositories/DriversRepository';
 import AppError from '../errors/AppError';
-
-/*
-Regras de negócio:
-[/] Um automóvel só pode ser utilizado por um motorista por vez.
-[/] Um motorista que já esteja utilizando um automóvel não pode utilizar outro automóvel
-   ao mesmo tempo.
-*/
 
 interface RequestParameters {
   reason: string;
@@ -17,21 +8,12 @@ interface RequestParameters {
   vehicleId: string;
 }
 
+/* This service contains the main business logic of our api. */
 class HireCarService {
-  private vehiclesRepository: VehiclesRepository;
-
   private vehiclesUsagesRepository: VehiclesUsagesRepository;
 
-  private driversRepository: DriversRepository;
-
-  constructor(
-    vehiclesRepository: VehiclesRepository,
-    vehiclesUsagesRepository: VehiclesUsagesRepository,
-    driversRepository: DriversRepository,
-  ) {
-    this.vehiclesRepository = vehiclesRepository;
+  constructor(vehiclesUsagesRepository: VehiclesUsagesRepository) {
     this.vehiclesUsagesRepository = vehiclesUsagesRepository;
-    this.driversRepository = driversRepository;
   }
 
   public execute({
@@ -39,32 +21,32 @@ class HireCarService {
     driverId,
     vehicleId,
   }: RequestParameters): VehicleUsage {
-    const isVehicleAvaliable = this.vehiclesRepository.isAvaliable(vehicleId);
+    const isVehicleAvaliable = this.vehiclesUsagesRepository.isVehicleAvaliable(
+      vehicleId,
+    );
 
-    if (isVehicleAvaliable) {
-      this.vehiclesRepository.vehicleStatusToggle(vehicleId);
-      console.log(this.vehiclesRepository.all());
-    } else {
+    /* A driver can only have one car at a time. */
+    if (!isVehicleAvaliable) {
       throw new AppError('This Vehicle is currently unavaliable.');
     }
 
-    const isDriverAvaliable = this.driversRepository.isAvaliable(driverId);
+    const isDriverAvaliable = this.vehiclesUsagesRepository.isDriverAvaliable(
+      driverId,
+    );
 
-    if (isDriverAvaliable) {
-      this.driversRepository.driverStatusToggle(driverId);
-    } else {
+    /* A vehicle can only have one driver at a time. */
+    if (!isDriverAvaliable) {
       throw new AppError(
         'This driver is an impostor. Call the police, he already took a car!',
       );
     }
 
+    /* Here vehicle is borrowed. */
     const vehicleUsage = this.vehiclesUsagesRepository.hire({
       reason,
       driverId,
       vehicleId,
     });
-
-    console.log(this.vehiclesRepository.all());
 
     return vehicleUsage;
   }

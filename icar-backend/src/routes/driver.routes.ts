@@ -5,6 +5,7 @@ import ListDriverService from '../services/ListDriverService';
 const driversRouter = Router();
 const driversRepository = new DriversRepository();
 
+/* Creates a new driver. */
 driversRouter.post('/', (request, response) => {
   const { name } = request.body;
 
@@ -13,6 +14,7 @@ driversRouter.post('/', (request, response) => {
   return response.status(200).json(driver);
 });
 
+/* Updates a driver. */
 driversRouter.put('/', (request, response) => {
   const { id, name, isAvaliable } = request.body;
 
@@ -21,6 +23,7 @@ driversRouter.put('/', (request, response) => {
   return response.status(204).json();
 });
 
+/* Removes a driver. */
 driversRouter.delete('/:id', (request, response) => {
   const { id } = request.params;
 
@@ -29,6 +32,8 @@ driversRouter.delete('/:id', (request, response) => {
   return response.status(204).json();
 });
 
+/* Finds and return a driver filtering by it's name.
+   If no filter is provided then all the drivers are returned. */
 driversRouter.get('/', (request, response) => {
   const name = request.query.name as string;
 
@@ -39,6 +44,7 @@ driversRouter.get('/', (request, response) => {
   return response.status(200).json(drivers);
 });
 
+/* Finds and return a driver by it's id. */
 driversRouter.get('/:id', (request, response) => {
   const { id } = request.params;
 

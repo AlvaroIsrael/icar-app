@@ -1,15 +1,26 @@
 ### What is it?
+
 <b>iCar App</b>
+Made with ❤️ by Alvaro Israel 👏🏻 [Get in touch!](https://www.linkedin.com/in/alvaroisraeldesenvolvedor/)
 
-### Technologies used: 
+This is just a concept app to show node.js skills. It was part of a code challenge given to me by Seidor Brasil enterprise.
+
+### 🏆 Technologies used:
+
 - [Node](https://nodejs.org/en/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [ExpressJs](https://expressjs.com/)
 
-### How to run?
-This project uses NodeJS, so in order for it to work, frist navigate insde each project folder and run npm install to download the proper dependencies: 
+### 💻 How to run?
+
+This project uses NodeJs, so in order for it to work, frist navigate inside the backend's project folder and run npm install to download the proper dependencies:
+
 ```
 cd icar-backend
 npm install
-npm run start
+npm dev:server
 ```
-### Licence
+
+### 📝 Licence
+
 This is under GPL v3 license. See [LICENSE](LICENSE.md) for more details.

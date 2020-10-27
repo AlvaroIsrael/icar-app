@@ -1,37 +1,27 @@
 import { Router } from 'express';
-import DriversRepository from '../repositories/DriversRepository';
-import VehiclesRepository from '../repositories/VehiclesRepository';
 import VehiclesUsagesRepository from '../repositories/VehiclesUsagesRepository';
+import VehiclesRepository from '../repositories/VehiclesRepository';
+import DriversRepository from '../repositories/DriversRepository';
 import HireCarService from '../services/HireCarService';
+import ListUsageService from '../services/ListUsageService';
 
 const vehiclesUsageRouter = Router();
-const driversRepository = new DriversRepository();
-const vehiclesRepository = new VehiclesRepository();
 const vehiclesUsagesRepository = new VehiclesUsagesRepository();
+const vehiclesRepository = new VehiclesRepository();
+const driversRepository = new DriversRepository();
 
-vehiclesUsageRouter.get('/', (request, response) => {
-  const drivers = vehiclesUsagesRepository.all();
-
-  return response.json(drivers);
-});
-
+/* Regisers a new usage of a car by one driver. */
 vehiclesUsageRouter.post('/', (request, response) => {
   try {
     const { reason, driverId, vehicleId } = request.body;
 
-    const hireCar = new HireCarService(
-      vehiclesRepository,
-      vehiclesUsagesRepository,
-      driversRepository,
-    );
+    const hireCar = new HireCarService(vehiclesUsagesRepository);
 
     const vehicleUsage = hireCar.execute({
       reason,
       driverId,
       vehicleId,
     });
-
-    console.log(vehiclesRepository.all());
 
     return response.status(200).json({
       message: 'Vehicle sucessfully borrowed.',
@@ -42,18 +32,30 @@ vehiclesUsageRouter.post('/', (request, response) => {
   }
 });
 
+/* Regisers a termination's date of a vehicle's usage by one driver. */
 vehiclesUsageRouter.patch('/', (request, response) => {
   try {
     const { id } = request.body;
 
     vehiclesUsagesRepository.return({ id });
-    driversRepository.driverStatusToggle(id);
-    vehiclesRepository.vehicleStatusToggle(id);
 
     return response.status(204).json();
   } catch (error) {
     return response.status(400).json({ message: error.message });
   }
+});
+
+/* Returns a list of all vehicles usage in the system. */
+vehiclesUsageRouter.get('/', (request, response) => {
+  const usageList = new ListUsageService(
+    vehiclesUsagesRepository,
+    vehiclesRepository,
+    driversRepository,
+  );
+
+  const usage = usageList.execute();
+
+  return response.status(200).json(usage);
 });
 
 export default vehiclesUsageRouter;

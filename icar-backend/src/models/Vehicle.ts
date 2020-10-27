@@ -1,5 +1,6 @@
 import { uuid } from 'uuidv4';
 
+/* Just an Entity representing a vehicle. */
 class Vehicle {
   id: string;
 
@@ -9,14 +10,11 @@ class Vehicle {
 
   plate: string;
 
-  isAvaliable: boolean;
-
-  constructor({ brand, color, plate }: Omit<Vehicle, 'id' | 'isAvaliable'>) {
+  constructor({ brand, color, plate }: Omit<Vehicle, 'id'>) {
     this.id = uuid();
     this.brand = brand;
     this.color = color;
     this.plate = plate;
-    this.isAvaliable = true;
   }
 }
 

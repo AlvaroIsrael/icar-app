@@ -1,16 +1,14 @@
 import { uuid } from 'uuidv4';
 
+/* Just an Entity representing a vehicle's driver. */
 class Driver {
   id: string;
 
   name: string;
 
-  isAvaliable: boolean;
-
-  constructor({ name }: Omit<Driver, 'id' | 'isAvaliable'>) {
+  constructor({ name }: Omit<Driver, 'id'>) {
     this.id = uuid();
     this.name = name;
-    this.isAvaliable = true;
   }
 }
 

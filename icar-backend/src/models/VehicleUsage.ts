@@ -1,5 +1,7 @@
 import { uuid } from 'uuidv4';
 
+/* Just an Entity representing a vehicle'ss usage.
+   This entity holds the relationship beteween a driver and its borrowed car. */
 class VehicleUsage {
   id: string;
 

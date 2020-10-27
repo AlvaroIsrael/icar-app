@@ -4,8 +4,6 @@ import * as HttpStatus from 'http-status-codes';
 import routes from './routes';
 import AppError from './errors/AppError';
 
-// import './database';
-
 const app = express();
 
 app.use(cors());
@@ -20,6 +18,7 @@ app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
     });
   }
 
+  /* Minimun of global error handling ensuring our app will never let an unhandled exception break. */
   return response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
     status: 'error',
     message: 'Internal server error.',

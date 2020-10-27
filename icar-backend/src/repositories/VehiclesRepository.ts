@@ -16,6 +16,8 @@ interface UpdateVehicleDto {
 class VehiclesRepository {
   private vehicles: Vehicle[];
 
+  /* Just a mocked array to simulate a persistence and avoid unecessary
+     complexity from a real database. */
   constructor() {
     this.vehicles = [
       {
@@ -23,49 +25,47 @@ class VehiclesRepository {
         brand: 'Aston Martin',
         color: 'Red',
         plate: 'CMD-100',
-        isAvaliable: true,
       },
       {
         id: '2c012170-fddc-4fc9-bd4b-de0d3f2a3993',
         brand: 'Alfa Romeo',
         color: 'Green',
         plate: 'CMD-200',
-        isAvaliable: true,
       },
       {
         id: '430cd34c-372c-4fac-832a-68c3071b4766',
         brand: 'Audi',
         color: 'Green',
         plate: 'CMD-300',
-        isAvaliable: true,
       },
       {
         id: '5d15dcae-996d-4403-87a3-610bc49c7a02',
         brand: 'Cadillac',
         color: 'Blue',
         plate: 'CMD-400',
-        isAvaliable: true,
       },
       {
         id: '3217394f-feb0-4aa2-9eef-ae2813dc0e76',
         brand: 'Chevrolet',
         color: 'Black',
         plate: 'CMD-500',
-        isAvaliable: true,
       },
     ];
   }
 
+  /* Return a list os all vehicles. */
   public all(): Vehicle[] {
     return this.vehicles;
   }
 
+  /* Adds a new vehicle to the database. */
   public create({ brand, color, plate }: CreateVehicleDto): Vehicle {
     const vehicle = new Vehicle({ brand, color, plate });
     this.vehicles.push(vehicle);
     return vehicle;
   }
 
+  /* Remove a vehicle from the database. */
   public remove(id: string): void {
     const vehicleToBeRemoved = this.vehicles.findIndex(v => v.id === id);
     if (vehicleToBeRemoved > -1) {
@@ -73,6 +73,7 @@ class VehiclesRepository {
     }
   }
 
+  /* Update a vehicle from the database. */
   public update({ id, brand, color, plate }: UpdateVehicleDto): void {
     const newVehicle = new Vehicle({ brand, color, plate });
     const vehicleToBeUpdated = this.vehicles.findIndex(v => v.id === id);
@@ -81,40 +82,30 @@ class VehiclesRepository {
     }
   }
 
-  public vehicleStatusToggle(id: string): void {
-    const vehicleToBeUpdated = this.vehicles.findIndex(v => v.id === id);
-    if (vehicleToBeUpdated > -1) {
-      const isAvaliable = !this.vehicles[vehicleToBeUpdated].isAvaliable;
-      this.vehicles[vehicleToBeUpdated].isAvaliable = isAvaliable;
-    }
-  }
-
+  /* Find the entrance of a vehicle by its id. */
   public findOne(id: string): Vehicle | null {
     const foundVehicle = this.vehicles.find(d => d.id === id);
     return foundVehicle || null;
   }
 
+  /* Find a list of vehicles by their color. */
   public findByColor(color: string): Vehicle[] | null {
     const vehicles = this.vehicles.filter(c => c.color === color);
     return vehicles || null;
   }
 
+  /* Find a list of vehicles by their brand. */
   public findByBrand(brand: string): Vehicle[] | null {
     const vehicles = this.vehicles.filter(c => c.brand === brand);
     return vehicles || null;
   }
 
+  /* Find a list of vehicles by their brand and color. */
   public findByColorAndBrand(color: string, brand: string): Vehicle[] | null {
     const vehicles = this.vehicles.filter(
       c => c.brand === brand && c.color === color,
     );
     return vehicles || null;
-  }
-
-  public isAvaliable(id: string): boolean {
-    const avaliableVehicle = this.vehicles.find(d => d.id === id);
-    const isAvaliable = !!avaliableVehicle?.isAvaliable;
-    return isAvaliable;
   }
 }
 

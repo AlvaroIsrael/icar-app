@@ -13,6 +13,8 @@ class ListCarService {
     this.vehiclesRepository = vehiclesRepository;
   }
 
+  /* This method was created just to simplify the process of filtering results
+     based at query params by color and brand or full results if no params at all. */
   public execute({ color, brand }: RequestParameters): Vehicle[] | null {
     let vehicles;
 
