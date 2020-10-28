@@ -5,7 +5,7 @@ Made with ❤️ by Alvaro Israel 👏🏻 [Get in touch!](https://www.linkedin.
 
 This is just a concept app to show node.js skills. It was part of a code challenge given to me by Seidor Brasil enterprise.
 
-### 🏆 Technologies used:
+### 🏆 Technologies used
 
 - [Node](https://nodejs.org/en/)
 - [TypeScript](https://www.typescriptlang.org/)

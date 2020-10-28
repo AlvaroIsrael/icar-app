@@ -9,19 +9,19 @@ interface RequestParameters {
 }
 
 /* This service contains the main business logic of our api. */
-class HireCarService {
+class HireVehicleService {
   private vehiclesUsagesRepository: VehiclesUsagesRepository;
 
   constructor(vehiclesUsagesRepository: VehiclesUsagesRepository) {
     this.vehiclesUsagesRepository = vehiclesUsagesRepository;
   }
 
-  public execute({
+  public async execute({
     reason,
     driverId,
     vehicleId,
-  }: RequestParameters): VehicleUsage {
-    const isVehicleAvaliable = this.vehiclesUsagesRepository.isVehicleAvaliable(
+  }: RequestParameters): Promise<VehicleUsage> {
+    const isVehicleAvaliable = await this.vehiclesUsagesRepository.isVehicleAvaliable(
       vehicleId,
     );
 
@@ -30,7 +30,7 @@ class HireCarService {
       throw new AppError('This Vehicle is currently unavaliable.');
     }
 
-    const isDriverAvaliable = this.vehiclesUsagesRepository.isDriverAvaliable(
+    const isDriverAvaliable = await this.vehiclesUsagesRepository.isDriverAvaliable(
       driverId,
     );
 
@@ -41,8 +41,8 @@ class HireCarService {
       );
     }
 
-    /* Here vehicle is borrowed. */
-    const vehicleUsage = this.vehiclesUsagesRepository.hire({
+    /* Here an avaliable vehicle is borrowed. */
+    const vehicleUsage = await this.vehiclesUsagesRepository.hire({
       reason,
       driverId,
       vehicleId,
@@ -52,4 +52,4 @@ class HireCarService {
   }
 }
 
-export default HireCarService;
+export default HireVehicleService;

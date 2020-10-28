@@ -54,19 +54,23 @@ class VehiclesRepository {
   }
 
   /* Return a list os all vehicles. */
-  public all(): Vehicle[] {
+  public async all(): Promise<Vehicle[]> {
     return this.vehicles;
   }
 
   /* Adds a new vehicle to the database. */
-  public create({ brand, color, plate }: CreateVehicleDto): Vehicle {
+  public async create({
+    brand,
+    color,
+    plate,
+  }: CreateVehicleDto): Promise<Vehicle> {
     const vehicle = new Vehicle({ brand, color, plate });
     this.vehicles.push(vehicle);
     return vehicle;
   }
 
   /* Remove a vehicle from the database. */
-  public remove(id: string): void {
+  public async remove(id: string): Promise<void> {
     const vehicleToBeRemoved = this.vehicles.findIndex(v => v.id === id);
     if (vehicleToBeRemoved > -1) {
       this.vehicles.splice(vehicleToBeRemoved, 1);
@@ -74,7 +78,12 @@ class VehiclesRepository {
   }
 
   /* Update a vehicle from the database. */
-  public update({ id, brand, color, plate }: UpdateVehicleDto): void {
+  public async update({
+    id,
+    brand,
+    color,
+    plate,
+  }: UpdateVehicleDto): Promise<void> {
     const newVehicle = new Vehicle({ brand, color, plate });
     const vehicleToBeUpdated = this.vehicles.findIndex(v => v.id === id);
     if (vehicleToBeUpdated > -1) {
@@ -83,25 +92,28 @@ class VehiclesRepository {
   }
 
   /* Find the entrance of a vehicle by its id. */
-  public findOne(id: string): Vehicle | null {
+  public async findOne(id: string): Promise<Vehicle | null> {
     const foundVehicle = this.vehicles.find(d => d.id === id);
     return foundVehicle || null;
   }
 
   /* Find a list of vehicles by their color. */
-  public findByColor(color: string): Vehicle[] | null {
+  public async findByColor(color: string): Promise<Vehicle[] | null> {
     const vehicles = this.vehicles.filter(c => c.color === color);
     return vehicles || null;
   }
 
   /* Find a list of vehicles by their brand. */
-  public findByBrand(brand: string): Vehicle[] | null {
+  public async findByBrand(brand: string): Promise<Vehicle[] | null> {
     const vehicles = this.vehicles.filter(c => c.brand === brand);
     return vehicles || null;
   }
 
   /* Find a list of vehicles by their brand and color. */
-  public findByColorAndBrand(color: string, brand: string): Vehicle[] | null {
+  public async findByColorAndBrand(
+    color: string,
+    brand: string,
+  ): Promise<Vehicle[] | null> {
     const vehicles = this.vehicles.filter(
       c => c.brand === brand && c.color === color,
     );

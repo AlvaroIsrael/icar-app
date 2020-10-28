@@ -1,4 +1,4 @@
-import { uuid } from 'uuidv4';
+import { v4 } from 'uuid';
 
 /* Just an Entity representing a vehicle. */
 class Vehicle {
@@ -11,7 +11,7 @@ class Vehicle {
   plate: string;
 
   constructor({ brand, color, plate }: Omit<Vehicle, 'id'>) {
-    this.id = uuid();
+    this.id = v4();
     this.brand = brand;
     this.color = color;
     this.plate = plate;

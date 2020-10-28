@@ -23,13 +23,14 @@ class ListUsageService {
   /* Due to the fact our main persistence array only has ids, this service was
      created to access and retrieve the other's entities data such as color, plate,
      brand and driver's name. */
-  public execute(): VehicleUsage[] {
-    const vehicleUsageList = this.vehiclesUsagesRepository.all();
+  public async execute(): Promise<VehicleUsage[]> {
+    const vehicleUsageList = await this.vehiclesUsagesRepository.all();
 
-    const ret = vehicleUsageList.map(item => {
-      const driverName = this.driversRepository.findOne(item.driverId)?.name;
-      const vehicle = this.vehiclesRepository.findOne(item.vehicleId);
+    const ret = vehicleUsageList.map(async item => {
+      const driver = await this.driversRepository.findOne(item.driverId);
+      const vehicle = await this.vehiclesRepository.findOne(item.vehicleId);
 
+      const driverName = driver?.name;
       const vehicleColor = vehicle?.color;
       const vehiclePlate = vehicle?.plate;
       const vehicleBrand = vehicle?.brand;
@@ -43,7 +44,9 @@ class ListUsageService {
       };
     });
 
-    return ret;
+    const vehicleUsageListResult = Promise.all(ret);
+
+    return vehicleUsageListResult;
   }
 }
 

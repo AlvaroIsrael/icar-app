@@ -18,12 +18,12 @@ class VehiclesUsagesRepository {
   }
 
   /* Return a list os all vehicles usages. */
-  public all(): VehicleUsage[] {
+  public async all(): Promise<VehicleUsage[]> {
     return this.vehiclesUsages;
   }
 
   /* Find the entrance of a borrowed vehicle by its id. */
-  public findOne(id: string): VehicleUsage | null {
+  public async findOne(id: string): Promise<VehicleUsage | null> {
     const foundUsage = this.vehiclesUsages.find(v => v.id === id);
     return foundUsage || null;
   }
@@ -33,7 +33,7 @@ class VehiclesUsagesRepository {
      a list of already borrowed vehicles and verify if none of the entrances have a null endDate.
      If any entrance has an endDate equal to null this means that entrance correspond to
      a vehicle witch is already taken and therefore cannot be taken before being released. */
-  public isDriverAvaliable(id: string): boolean {
+  public async isDriverAvaliable(id: string): Promise<boolean> {
     let isAvaliable = true;
     const driverList = this.vehiclesUsages.filter(d => d.driverId === id);
 
@@ -50,7 +50,7 @@ class VehiclesUsagesRepository {
 
   /* This function follows the same purpose and logic described above, but is related
      to the avaliability of the vehicle and not the Driver. */
-  public isVehicleAvaliable(id: string): boolean {
+  public async isVehicleAvaliable(id: string): Promise<boolean> {
     let isAvaliable = true;
     const vehiclesList = this.vehiclesUsages.filter(v => v.vehicleId === id);
 
@@ -66,7 +66,11 @@ class VehiclesUsagesRepository {
   }
 
   /* Registers the hiring of a Vehicle. */
-  public hire({ reason, driverId, vehicleId }: HireVehicleDto): VehicleUsage {
+  public async hire({
+    reason,
+    driverId,
+    vehicleId,
+  }: HireVehicleDto): Promise<VehicleUsage> {
     const usage = new VehicleUsage({
       startDate: new Date(),
       endDate: null,
@@ -79,7 +83,7 @@ class VehiclesUsagesRepository {
   }
 
   /* Registers the returning of a previouslly borrowed Vehicle. */
-  public return({ id }: ReturnVehicleDto): void {
+  public async return({ id }: ReturnVehicleDto): Promise<void> {
     const usageToBeUpdated = this.vehiclesUsages.findIndex(u => u.id === id);
     if (usageToBeUpdated > -1) {
       this.vehiclesUsages[usageToBeUpdated].endDate = new Date();

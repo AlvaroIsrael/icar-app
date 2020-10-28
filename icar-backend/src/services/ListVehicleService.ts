@@ -6,7 +6,7 @@ interface RequestParameters {
   brand: string | undefined;
 }
 
-class ListCarService {
+class ListVehicleService {
   private vehiclesRepository: VehiclesRepository;
 
   constructor(vehiclesRepository: VehiclesRepository) {
@@ -15,21 +15,27 @@ class ListCarService {
 
   /* This method was created just to simplify the process of filtering results
      based at query params by color and brand or full results if no params at all. */
-  public execute({ color, brand }: RequestParameters): Vehicle[] | null {
-    let vehicles;
+  public async execute({
+    color,
+    brand,
+  }: RequestParameters): Promise<Vehicle[] | null> {
+    let vehicles: Vehicle[] | null;
 
     if (color && brand) {
-      vehicles = this.vehiclesRepository.findByColorAndBrand(color, brand);
+      vehicles = await this.vehiclesRepository.findByColorAndBrand(
+        color,
+        brand,
+      );
     } else if (color) {
-      vehicles = this.vehiclesRepository.findByColor(color);
+      vehicles = await this.vehiclesRepository.findByColor(color);
     } else if (brand) {
-      vehicles = this.vehiclesRepository.findByColor(brand);
+      vehicles = await this.vehiclesRepository.findByBrand(brand);
     } else {
-      vehicles = this.vehiclesRepository.all();
+      vehicles = await this.vehiclesRepository.all();
     }
 
     return vehicles;
   }
 }
 
-export default ListCarService;
+export default ListVehicleService;

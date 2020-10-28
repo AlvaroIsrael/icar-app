@@ -41,19 +41,19 @@ class DriversRepository {
   }
 
   /* Return a list os all drivers. */
-  public all(): Driver[] {
+  public async all(): Promise<Driver[]> {
     return this.drivers;
   }
 
   /* Adds a new driver to the database. */
-  public create({ name }: CreateDriverDto): Driver {
+  public async create({ name }: CreateDriverDto): Promise<Driver> {
     const car = new Driver({ name });
     this.drivers.push(car);
     return car;
   }
 
   /* Update a driver from the database. */
-  public update({ id, name }: UpdateDriverDto): void {
+  public async update({ id, name }: UpdateDriverDto): Promise<void> {
     const newDriver = new Driver({ name });
     const driverToBeUpdated = this.drivers.findIndex(d => d.id === id);
     if (driverToBeUpdated > -1) {
@@ -62,7 +62,7 @@ class DriversRepository {
   }
 
   /* Remove a driver from the database. */
-  public remove(id: string): void {
+  public async remove(id: string): Promise<void> {
     const vdriverToBeRemoved = this.drivers.findIndex(d => d.id === id);
     if (vdriverToBeRemoved > -1) {
       this.drivers.splice(vdriverToBeRemoved, 1);
@@ -70,13 +70,13 @@ class DriversRepository {
   }
 
   /* Find the entrance of a driver by its id. */
-  public findOne(id: string): Driver | null {
+  public async findOne(id: string): Promise<Driver | null> {
     const foundDriver = this.drivers.find(d => d.id === id);
     return foundDriver || null;
   }
 
   /* Find the entrance of a driver by its name. */
-  public findByName(name: string): Driver[] | null {
+  public async findByName(name: string): Promise<Driver[] | null> {
     const cars = this.drivers.filter(c => c.name === name);
     return cars || null;
   }

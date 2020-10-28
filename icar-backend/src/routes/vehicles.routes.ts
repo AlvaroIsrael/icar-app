@@ -1,30 +1,30 @@
 import { Router } from 'express';
 import VehiclesRepository from '../repositories/VehiclesRepository';
-import ListCarService from '../services/ListCarService';
+import ListVehicleService from '../services/ListVehicleService';
 
 const vehiclesRouter = Router();
 const vehiclesRepository = new VehiclesRepository();
 
 /* Creates a new vehicle. */
-vehiclesRouter.post('/', (request, response) => {
+vehiclesRouter.post('/', async (request, response) => {
   const { brand, color, plate } = request.body;
 
-  const car = vehiclesRepository.create({ brand, color, plate });
+  const car = await vehiclesRepository.create({ brand, color, plate });
 
   return response.status(200).json(car);
 });
 
 /* Updates a vehicle. */
-vehiclesRouter.put('/', (request, response) => {
+vehiclesRouter.put('/', async (request, response) => {
   const { id, brand, color, plate } = request.body;
 
-  vehiclesRepository.update({ id, brand, color, plate });
+  await vehiclesRepository.update({ id, brand, color, plate });
 
   return response.status(204).json();
 });
 
 /* Removes a vehicle. */
-vehiclesRouter.delete('/:id', (request, response) => {
+vehiclesRouter.delete('/:id', async (request, response) => {
   const { id } = request.params;
 
   vehiclesRepository.remove(id);
@@ -34,22 +34,22 @@ vehiclesRouter.delete('/:id', (request, response) => {
 
 /* Finds and return a vehicle filtering by it's color OR brand.
    If no filter is provided then all the vehicles are returned. */
-vehiclesRouter.get('/', (request, response) => {
+vehiclesRouter.get('/', async (request, response) => {
   const color = request.query.color as string;
   const brand = request.query.brand as string;
 
-  const listCars = new ListCarService(vehiclesRepository);
+  const listCars = new ListVehicleService(vehiclesRepository);
 
-  const vehicles = listCars.execute({ color, brand });
+  const vehicles = await listCars.execute({ color, brand });
 
   return response.status(200).json(vehicles);
 });
 
 /* Finds and return a vehicle by it's id. */
-vehiclesRouter.get('/:id', (request, response) => {
+vehiclesRouter.get('/:id', async (request, response) => {
   const { id } = request.params;
 
-  const vehicle = vehiclesRepository.findOne(id);
+  const vehicle = await vehiclesRepository.findOne(id);
 
   return response.status(200).json(vehicle);
 });

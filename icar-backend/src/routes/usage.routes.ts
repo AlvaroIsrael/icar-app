@@ -2,7 +2,7 @@ import { Router } from 'express';
 import VehiclesUsagesRepository from '../repositories/VehiclesUsagesRepository';
 import VehiclesRepository from '../repositories/VehiclesRepository';
 import DriversRepository from '../repositories/DriversRepository';
-import HireCarService from '../services/HireCarService';
+import HireVehicleService from '../services/HireVehicleService';
 import ListUsageService from '../services/ListUsageService';
 
 const vehiclesUsageRouter = Router();
@@ -11,13 +11,13 @@ const vehiclesRepository = new VehiclesRepository();
 const driversRepository = new DriversRepository();
 
 /* Regisers a new usage of a car by one driver. */
-vehiclesUsageRouter.post('/', (request, response) => {
+vehiclesUsageRouter.post('/', async (request, response) => {
   try {
     const { reason, driverId, vehicleId } = request.body;
 
-    const hireCar = new HireCarService(vehiclesUsagesRepository);
+    const hireCar = new HireVehicleService(vehiclesUsagesRepository);
 
-    const vehicleUsage = hireCar.execute({
+    const vehicleUsage = await hireCar.execute({
       reason,
       driverId,
       vehicleId,
@@ -33,11 +33,11 @@ vehiclesUsageRouter.post('/', (request, response) => {
 });
 
 /* Regisers a termination's date of a vehicle's usage by one driver. */
-vehiclesUsageRouter.patch('/', (request, response) => {
+vehiclesUsageRouter.patch('/', async (request, response) => {
   try {
     const { id } = request.body;
 
-    vehiclesUsagesRepository.return({ id });
+    await vehiclesUsagesRepository.return({ id });
 
     return response.status(204).json();
   } catch (error) {
@@ -46,14 +46,14 @@ vehiclesUsageRouter.patch('/', (request, response) => {
 });
 
 /* Returns a list of all vehicles usage in the system. */
-vehiclesUsageRouter.get('/', (request, response) => {
+vehiclesUsageRouter.get('/', async (request, response) => {
   const usageList = new ListUsageService(
     vehiclesUsagesRepository,
     vehiclesRepository,
     driversRepository,
   );
 
-  const usage = usageList.execute();
+  const usage = await usageList.execute();
 
   return response.status(200).json(usage);
 });

@@ -1,6 +1,6 @@
-import { uuid } from 'uuidv4';
+import { v4 } from 'uuid';
 
-/* Just an Entity representing a vehicle'ss usage.
+/* Just an Entity representing a vehicle's usage.
    This entity holds the relationship beteween a driver and its borrowed car. */
 class VehicleUsage {
   id: string;
@@ -21,7 +21,7 @@ class VehicleUsage {
     driverId,
     vehicleId,
   }: Omit<VehicleUsage, 'id'>) {
-    this.id = uuid();
+    this.id = v4();
     this.startDate = startDate;
     this.endDate = null;
     this.reason = reason;
