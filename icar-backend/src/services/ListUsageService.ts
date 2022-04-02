@@ -21,8 +21,8 @@ class ListUsageService {
   }
 
   /* Due to the fact our main persistence array only has ids, this service was
-     created to access and retrieve the other's entities data such as color, plate,
-     brand and driver's name. */
+   created to access and retrieve the other's entities data such as color, plate,
+   brand and driver's name. */
   public async execute(): Promise<VehicleUsage[]> {
     const vehicleUsageList = await this.vehiclesUsagesRepository.all();
 
@@ -44,9 +44,7 @@ class ListUsageService {
       };
     });
 
-    const vehicleUsageListResult = Promise.all(ret);
-
-    return vehicleUsageListResult;
+    return Promise.all(ret);
   }
 }
 

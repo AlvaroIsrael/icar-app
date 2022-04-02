@@ -33,7 +33,7 @@ driversRouter.delete('/:id', async (request, response) => {
 });
 
 /* Finds and return a driver filtering by it's name.
-   If no filter is provided then all the drivers are returned. */
+ If no filter is provided then all the drivers are returned. */
 driversRouter.get('/', async (request, response) => {
   const name = request.query.name as string;
 

@@ -27,13 +27,13 @@ vehiclesRouter.put('/', async (request, response) => {
 vehiclesRouter.delete('/:id', async (request, response) => {
   const { id } = request.params;
 
-  vehiclesRepository.remove(id);
+  await vehiclesRepository.remove(id);
 
   return response.status(204).json();
 });
 
 /* Finds and return a vehicle filtering by it's color OR brand.
-   If no filter is provided then all the vehicles are returned. */
+ If no filter is provided then all the vehicles are returned. */
 vehiclesRouter.get('/', async (request, response) => {
   const color = request.query.color as string;
   const brand = request.query.brand as string;

@@ -16,39 +16,27 @@ class HireVehicleService {
     this.vehiclesUsagesRepository = vehiclesUsagesRepository;
   }
 
-  public async execute({
-    reason,
-    driverId,
-    vehicleId,
-  }: RequestParameters): Promise<VehicleUsage> {
-    const isVehicleAvaliable = await this.vehiclesUsagesRepository.isVehicleAvaliable(
-      vehicleId,
-    );
+  public async execute({ reason, driverId, vehicleId }: RequestParameters): Promise<VehicleUsage> {
+    const isVehicleAvaliable = await this.vehiclesUsagesRepository.isVehicleAvaliable(vehicleId);
 
     /* A driver can only have one car at a time. */
     if (!isVehicleAvaliable) {
       throw new AppError('This Vehicle is currently unavaliable.');
     }
 
-    const isDriverAvaliable = await this.vehiclesUsagesRepository.isDriverAvaliable(
-      driverId,
-    );
+    const isDriverAvaliable = await this.vehiclesUsagesRepository.isDriverAvaliable(driverId);
 
     /* A vehicle can only have one driver at a time. */
     if (!isDriverAvaliable) {
-      throw new AppError(
-        'This driver is an impostor. Call the police, he already took a car!',
-      );
+      throw new AppError('This driver is an impostor. Call the police, he already took a car!');
     }
 
     /* Here an avaliable vehicle is borrowed. */
-    const vehicleUsage = await this.vehiclesUsagesRepository.hire({
+    return this.vehiclesUsagesRepository.hire({
       reason,
       driverId,
       vehicleId,
     });
-
-    return vehicleUsage;
   }
 }
 

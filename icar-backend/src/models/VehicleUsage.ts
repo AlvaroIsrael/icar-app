@@ -1,7 +1,7 @@
 import { v4 } from 'uuid';
 
 /* Just an Entity representing a vehicle's usage.
-   This entity holds the relationship beteween a driver and its borrowed car. */
+ This entity holds the relationship beteween a driver and its borrowed car. */
 class VehicleUsage {
   id: string;
 
@@ -15,12 +15,7 @@ class VehicleUsage {
 
   vehicleId: string;
 
-  constructor({
-    startDate,
-    reason,
-    driverId,
-    vehicleId,
-  }: Omit<VehicleUsage, 'id'>) {
+  constructor({ startDate, reason, driverId, vehicleId }: Omit<VehicleUsage, 'id'>) {
     this.id = v4();
     this.startDate = startDate;
     this.endDate = null;

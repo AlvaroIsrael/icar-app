@@ -11,10 +11,10 @@ interface UpdateDriverDto {
 }
 
 class DriversRepository {
-  private drivers: Driver[];
+  private readonly drivers: Driver[];
 
   /* Just a mocked array to simulate a persistence and avoid unecessary
-     complexity from a real database. */
+   complexity from a real database. */
   constructor() {
     this.drivers = [
       {

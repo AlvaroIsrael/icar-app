@@ -29,10 +29,10 @@ class VehiclesUsagesRepository {
   }
 
   /* This function has the purpose to ensure that a driver is not driving any car.
-     In order to accomlish this I loop through the VehicleUsage array wich represents
-     a list of already borrowed vehicles and verify if none of the entrances have a null endDate.
-     If any entrance has an endDate equal to null this means that entrance correspond to
-     a vehicle witch is already taken and therefore cannot be taken before being released. */
+   In order to accomlish this I loop through the VehicleUsage array wich represents
+   a list of already borrowed vehicles and verify if none of the entrances have a null endDate.
+   If any entrance has an endDate equal to null this means that entrance correspond to
+   a vehicle witch is already taken and therefore cannot be taken before being released. */
   public async isDriverAvaliable(id: string): Promise<boolean> {
     let isAvaliable = true;
     const driverList = this.vehiclesUsages.filter(d => d.driverId === id);
@@ -49,7 +49,7 @@ class VehiclesUsagesRepository {
   }
 
   /* This function follows the same purpose and logic described above, but is related
-     to the avaliability of the vehicle and not the Driver. */
+   to the avaliability of the vehicle and not the Driver. */
   public async isVehicleAvaliable(id: string): Promise<boolean> {
     let isAvaliable = true;
     const vehiclesList = this.vehiclesUsages.filter(v => v.vehicleId === id);
@@ -66,11 +66,7 @@ class VehiclesUsagesRepository {
   }
 
   /* Registers the hiring of a Vehicle. */
-  public async hire({
-    reason,
-    driverId,
-    vehicleId,
-  }: HireVehicleDto): Promise<VehicleUsage> {
+  public async hire({ reason, driverId, vehicleId }: HireVehicleDto): Promise<VehicleUsage> {
     const usage = new VehicleUsage({
       startDate: new Date(),
       endDate: null,

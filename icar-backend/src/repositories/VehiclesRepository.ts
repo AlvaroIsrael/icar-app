@@ -14,10 +14,10 @@ interface UpdateVehicleDto {
 }
 
 class VehiclesRepository {
-  private vehicles: Vehicle[];
+  private readonly vehicles: Vehicle[];
 
   /* Just a mocked array to simulate a persistence and avoid unecessary
-     complexity from a real database. */
+   complexity from a real database. */
   constructor() {
     this.vehicles = [
       {
@@ -59,11 +59,7 @@ class VehiclesRepository {
   }
 
   /* Adds a new vehicle to the database. */
-  public async create({
-    brand,
-    color,
-    plate,
-  }: CreateVehicleDto): Promise<Vehicle> {
+  public async create({ brand, color, plate }: CreateVehicleDto): Promise<Vehicle> {
     const vehicle = new Vehicle({ brand, color, plate });
     this.vehicles.push(vehicle);
     return vehicle;
@@ -78,12 +74,7 @@ class VehiclesRepository {
   }
 
   /* Update a vehicle from the database. */
-  public async update({
-    id,
-    brand,
-    color,
-    plate,
-  }: UpdateVehicleDto): Promise<void> {
+  public async update({ id, brand, color, plate }: UpdateVehicleDto): Promise<void> {
     const newVehicle = new Vehicle({ brand, color, plate });
     const vehicleToBeUpdated = this.vehicles.findIndex(v => v.id === id);
     if (vehicleToBeUpdated > -1) {
@@ -110,13 +101,8 @@ class VehiclesRepository {
   }
 
   /* Find a list of vehicles by their brand and color. */
-  public async findByColorAndBrand(
-    color: string,
-    brand: string,
-  ): Promise<Vehicle[] | null> {
-    const vehicles = this.vehicles.filter(
-      c => c.brand === brand && c.color === color,
-    );
+  public async findByColorAndBrand(color: string, brand: string): Promise<Vehicle[] | null> {
+    const vehicles = this.vehicles.filter(c => c.brand === brand && c.color === color);
     return vehicles || null;
   }
 }

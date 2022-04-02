@@ -13,7 +13,7 @@ class ListDriverService {
   }
 
   /* This method was created just to simplify the process of filtering results
-     based at query params by name or full results if no params at all. */
+   based at query params by name or full results if no params at all. */
   public async execute({ name }: RequestParameters): Promise<Driver[] | null> {
     let drivers;
 

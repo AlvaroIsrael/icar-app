@@ -1,9 +1,11 @@
 import { Router } from 'express';
+import { StatusCodes } from 'http-status-codes';
 import VehiclesUsagesRepository from '../repositories/VehiclesUsagesRepository';
 import VehiclesRepository from '../repositories/VehiclesRepository';
 import DriversRepository from '../repositories/DriversRepository';
 import HireVehicleService from '../services/HireVehicleService';
 import ListUsageService from '../services/ListUsageService';
+import AppError from '../errors/AppError';
 
 const vehiclesUsageRouter = Router();
 const vehiclesUsagesRepository = new VehiclesUsagesRepository();
@@ -28,7 +30,10 @@ vehiclesUsageRouter.post('/', async (request, response) => {
       vehicleUsage,
     });
   } catch (error) {
-    return response.status(400).json({ message: error.message });
+    if (error instanceof AppError) {
+      return response.status(error.statusCode).json({ erro: error.message });
+    }
+    return response.status(StatusCodes.INTERNAL_SERVER_ERROR);
   }
 });
 
@@ -41,17 +46,16 @@ vehiclesUsageRouter.patch('/', async (request, response) => {
 
     return response.status(204).json();
   } catch (error) {
-    return response.status(400).json({ message: error.message });
+    if (error instanceof AppError) {
+      return response.status(error.statusCode).json({ erro: error.message });
+    }
+    return response.status(StatusCodes.INTERNAL_SERVER_ERROR);
   }
 });
 
 /* Returns a list of all vehicles usage in the system. */
 vehiclesUsageRouter.get('/', async (request, response) => {
-  const usageList = new ListUsageService(
-    vehiclesUsagesRepository,
-    vehiclesRepository,
-    driversRepository,
-  );
+  const usageList = new ListUsageService(vehiclesUsagesRepository, vehiclesRepository, driversRepository);
 
   const usage = await usageList.execute();
 
